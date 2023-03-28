@@ -39,43 +39,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var fs_1 = require("fs");
-var path_1 = __importDefault(require("path"));
-var file_1 = __importDefault(require("./../file"));
-var main_1 = __importDefault(require("../main"));
 var supertest_1 = __importDefault(require("supertest"));
+var main_1 = __importDefault(require("../main"));
 var request = (0, supertest_1.default)(main_1.default);
-describe('Test image processing via sharp', function () {
-    it('succeeds to write resized thumb file (existing file, valid size values)', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var resizedImagePath, errorFile, _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0: return [4 /*yield*/, file_1.default.createThumb({ filename: 'argentina', width: '99', height: '99' })];
-                case 1:
-                    _b.sent();
-                    resizedImagePath = path_1.default.resolve(file_1.default.imagesThumbPath, "argentina-99x99.jpg");
-                    errorFile = '';
-                    _b.label = 2;
-                case 2:
-                    _b.trys.push([2, 4, , 5]);
-                    return [4 /*yield*/, fs_1.promises.access(resizedImagePath)];
-                case 3:
-                    _b.sent();
-                    errorFile = null;
-                    return [3 /*break*/, 5];
-                case 4:
-                    _a = _b.sent();
-                    errorFile = 'File was not created';
-                    return [3 /*break*/, 5];
-                case 5:
-                    expect(errorFile).toBeNull();
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-});
 describe('endpoint: /api/images', function () {
-    it('gets /api/images?filename=argentina&width=199&height=199 (valid args)', function () { return __awaiter(void 0, void 0, void 0, function () {
+    it('gets /api/images?filename=argentina&width=199&height=199', function () { return __awaiter(void 0, void 0, void 0, function () {
         var response;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -87,14 +55,14 @@ describe('endpoint: /api/images', function () {
             }
         });
     }); });
-    it('gets /api/images (no arguments)', function () { return __awaiter(void 0, void 0, void 0, function () {
+    it('gets /api/images?filename=argentina&width=199', function () { return __awaiter(void 0, void 0, void 0, function () {
         var response;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get('/api/images')];
+                case 0: return [4 /*yield*/, request.get('/api/images?filename=argentina&width=199')];
                 case 1:
                     response = _a.sent();
-                    expect(response.status).toBe(200);
+                    expect(response.status).toBe(500);
                     return [2 /*return*/];
             }
         });

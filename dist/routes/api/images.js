@@ -39,32 +39,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 var express_1 = __importDefault(require("express"));
-var file_1 = __importDefault(require("./../../file"));
+var imgProcess_1 = __importDefault(require("./../../imgProcess"));
 var images = express_1.default.Router();
 images.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var path;
+    var path, imageExist, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, file_1.default.isImageAvailable(req.query['filename'])];
+            case 0:
+                _a.trys.push([0, 5, , 6]);
+                return [4 /*yield*/, imgProcess_1.default.readImageExist(req.query['filename'], req.query['width'], req.query['height'])];
             case 1:
-                if (!(!(_a.sent()) || !req.query['width'] || !req.query['height'])) return [3 /*break*/, 2];
-                res.send("Url is wrong");
-                return [2 /*return*/];
-            case 2: return [4 /*yield*/, file_1.default.isThumbAvailable(req.query)];
+                imageExist = _a.sent();
+                if (!imageExist) return [3 /*break*/, 2];
+                path = imageExist;
+                return [3 /*break*/, 4];
+            case 2: return [4 /*yield*/, imgProcess_1.default.resizedImage(req.query['filename'], req.query['width'], req.query['height'])];
             case 3:
-                if (!!(_a.sent())) return [3 /*break*/, 5];
-                return [4 /*yield*/, file_1.default.createThumb(req.query)];
-            case 4:
-                _a.sent();
-                _a.label = 5;
-            case 5: return [4 /*yield*/, file_1.default.getImagePath(req.query)];
-            case 6:
                 path = _a.sent();
+                _a.label = 4;
+            case 4: return [3 /*break*/, 6];
+            case 5:
+                error_1 = _a.sent();
+                path = '';
+                return [3 /*break*/, 6];
+            case 6:
                 if (path) {
-                    res.sendFile(path);
+                    res.status(200).sendFile(path);
                 }
                 else {
-                    res.send('Url is wrong');
+                    res.status(500).send('Error: URL is missing');
                 }
                 return [2 /*return*/];
         }

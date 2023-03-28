@@ -39,54 +39,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var sharp_1 = __importDefault(require("sharp"));
-var path_1 = __importDefault(require("path"));
-var fs_1 = require("fs");
-function readImageExist(fileName, width, height) {
-    return __awaiter(this, void 0, void 0, function () {
-        var imagesThumbPath, newImage, imageFiles, filenames;
+var imgProcess_1 = __importDefault(require("../imgProcess"));
+describe('function read a file image exist in folder', function () {
+    it('should exist image', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var data;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    imagesThumbPath = path_1.default.resolve(__dirname, '../assets/thumb');
-                    newImage = "".concat(fileName, "(").concat(width, "x").concat(height, ").jpg");
-                    return [4 /*yield*/, fs_1.promises.readdir(imagesThumbPath)];
+                case 0: return [4 /*yield*/, imgProcess_1.default.readImageExist('argentinaa', '200', '200')];
                 case 1:
-                    imageFiles = _a.sent();
-                    filenames = imageFiles.map(function (file) { return path_1.default.basename(file); });
-                    if (filenames.includes(newImage)) {
-                        return [2 /*return*/, "".concat(imagesThumbPath, "\\").concat(newImage)];
-                    }
-                    else {
-                        return [2 /*return*/, false];
-                    }
+                    data = _a.sent();
+                    expect(data).toEqual(false);
                     return [2 /*return*/];
             }
         });
-    });
-}
-function resizedImage(fileName, width, height) {
-    return __awaiter(this, void 0, void 0, function () {
-        var newImage, imagesThumbPath, imagesFullPath, imagePath, savePath, resizedImage;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    newImage = "".concat(fileName, "(").concat(width, "x").concat(height, ").jpg");
-                    imagesThumbPath = path_1.default.resolve(__dirname, '../assets/thumb');
-                    imagesFullPath = path_1.default.resolve(__dirname, '../assets/full');
-                    imagePath = "".concat(imagesFullPath, "/").concat(fileName, ".jpg");
-                    savePath = "".concat(imagesThumbPath, "/").concat(fileName, "(").concat(width, "x").concat(height, ").jpg");
-                    return [4 /*yield*/, (0, sharp_1.default)(imagePath)
-                            .resize(parseInt(width), parseInt(height))
-                            .toBuffer()];
-                case 1:
-                    resizedImage = _a.sent();
-                    return [4 /*yield*/, fs_1.promises.writeFile(savePath, resizedImage)];
-                case 2:
-                    _a.sent();
-                    return [2 /*return*/, "".concat(imagesThumbPath, "\\").concat(newImage)];
-            }
-        });
-    });
-}
-exports.default = { readImageExist: readImageExist, resizedImage: resizedImage };
+    }); });
+});

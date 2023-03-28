@@ -1,23 +1,31 @@
 import express from 'express';
-import File from './../../file';
+import processImage from './../../imgProcess';
 const images = express.Router();
 
-images.get('/', async (req, res): Promise<void> => {
-    if (!(await File.isImageAvailable(req.query['filename'])) || !req.query['width'] || !req.query['height']) {
-        res.send(`Url is wrong`);
-        return;
-    } else {
-        if (!(await File.isThumbAvailable(req.query))) {
-            await File.createThumb(req.query);
+images.get('/', async (req, res) => {
+    let path: string;
+    try {
+        const imageExist = await processImage.readImageExist(
+            req.query['filename'] as string,
+            req.query['width'] as string,
+            req.query['height'] as string
+        );
+        if (imageExist) {
+            path = imageExist;
+        } else {
+            path = await processImage.resizedImage(
+                req.query['filename'] as string,
+                req.query['width'] as string,
+                req.query['height'] as string
+            );
         }
+    } catch (error) {
+        path = '';
     }
-
-    const path: null | string = await File.getImagePath(req.query);
-
     if (path) {
-        res.sendFile(path);
+        res.status(200).sendFile(path);
     } else {
-        res.send('Url is wrong');
+        res.status(500).send('Error: URL is missing');
     }
 });
 
