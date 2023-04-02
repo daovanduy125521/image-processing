@@ -48,7 +48,7 @@ describe('function read a file image exist in folder', function () {
                 case 0: return [4 /*yield*/, imgProcess_1.default.readImageExist('argentinaa', '200', '200')];
                 case 1:
                     data = _a.sent();
-                    expect(data).toEqual(false);
+                    expect(data).toEqual('false');
                     return [2 /*return*/];
             }
         });

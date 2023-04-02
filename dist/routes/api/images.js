@@ -46,30 +46,39 @@ images.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, f
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 5, , 6]);
-                return [4 /*yield*/, imgProcess_1.default.readImageExist(req.query['filename'], req.query['width'], req.query['height'])];
+                if (!(Number.isNaN(Number(req.query['height'])) || Number(req.query['height']) < 1)) return [3 /*break*/, 1];
+                res.status(500).send('Error: URL with height is missing');
+                return [3 /*break*/, 9];
             case 1:
-                imageExist = _a.sent();
-                if (!imageExist) return [3 /*break*/, 2];
-                path = imageExist;
-                return [3 /*break*/, 4];
-            case 2: return [4 /*yield*/, imgProcess_1.default.resizedImage(req.query['filename'], req.query['width'], req.query['height'])];
+                if (!(Number.isNaN(Number(req.query['width'])) || Number(req.query['width']) < 1)) return [3 /*break*/, 2];
+                res.status(500).send('Error: URL with width is missing');
+                return [3 /*break*/, 9];
+            case 2:
+                _a.trys.push([2, 7, , 8]);
+                return [4 /*yield*/, imgProcess_1.default.readImageExist(req.query['filename'], req.query['width'], req.query['height'])];
             case 3:
-                path = _a.sent();
-                _a.label = 4;
-            case 4: return [3 /*break*/, 6];
+                imageExist = _a.sent();
+                if (!(imageExist !== 'false')) return [3 /*break*/, 4];
+                path = imageExist;
+                return [3 /*break*/, 6];
+            case 4: return [4 /*yield*/, imgProcess_1.default.resizedImage(req.query['filename'], req.query['width'], req.query['height'])];
             case 5:
+                path = _a.sent();
+                _a.label = 6;
+            case 6: return [3 /*break*/, 8];
+            case 7:
                 error_1 = _a.sent();
                 path = '';
-                return [3 /*break*/, 6];
-            case 6:
+                return [3 /*break*/, 8];
+            case 8:
                 if (path) {
                     res.status(200).sendFile(path);
                 }
                 else {
                     res.status(500).send('Error: URL is missing');
                 }
-                return [2 /*return*/];
+                _a.label = 9;
+            case 9: return [2 /*return*/];
         }
     });
 }); });
